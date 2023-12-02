@@ -2,10 +2,7 @@ package com.challenge.adventofcode.controller;
 
 import com.challenge.adventofcode.util.ChallengeUtil;
 import com.challenge.adventofcode.util.InputReader;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "api/v1/challenges")
@@ -22,8 +19,29 @@ public class ChallengesController {
                 InputReader
                         .getLines(body)
                         .stream()
-                        .map(ChallengeUtil::convertStringNumsToInts
-                        ).toList());
+                        .map(ChallengeUtil::convertStringNumsToInts)
+                        .toList());
     }
+
+    @GetMapping(value = "/c2")
+    public int solveChallenge2(@RequestBody String body) {
+        return InputReader.getLines(body)
+                .stream()
+                .mapToInt(ChallengeUtil::findPossibleGames)
+                .sum();
+    }
+
+    @GetMapping(value = "/c2p2")
+    public int solveChallenge2part2(@RequestBody String body) {
+        return InputReader.getLines(body)
+                .stream()
+                .mapToInt(line -> ChallengeUtil.calculatePowerSet(line.split(":")[1]))
+                .sum();
+    }
+
+//    @ExceptionHandler(RuntimeException.class)
+//    public final ResponseEntity<Exception> handleAllExceptions(RuntimeException ex) {
+//        return new ResponseEntity<>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
 }
