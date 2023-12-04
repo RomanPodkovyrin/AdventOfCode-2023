@@ -1,9 +1,6 @@
 package com.challenge.adventofcode.util;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ChallengeUtil {
 
@@ -87,5 +84,39 @@ public class ChallengeUtil {
                         .anyMatch(draw -> !areCubeConstrintsMeet(draw)));
         if (check) return 0;
         return id;
+    }
+
+    public static int getNumberOfMatchingNumbers(String line) {
+        var count = 0;
+        var splitLine = line.split("\\|");
+        var winningNumbers = Arrays.stream(splitLine[0].split(" ")).filter(n -> !Objects.equals(n, "")).toList();
+        var myNumbers = Arrays.stream(splitLine[1].split(" ")).filter(n -> !Objects.equals(n, "")).toList();
+        for (String winningNumber : winningNumbers) {
+            count = myNumbers.contains(winningNumber) ? count + 1 : count;
+        }
+        return count;
+    }
+
+    public static List<Integer> getScratchcardsOfScratchcards(String body) {
+        var lines = InputReader.getLines(body);
+        List<Integer> cards = new ArrayList<>(Collections.nCopies(lines.size(), 1));
+        for (int i = 0; i < lines.size(); i++) {
+            var line = lines.get(i);
+            var wins = getNumberOfMatchingNumbers(line.split(":")[1]);
+            for (int j = i + 1; j < lines.size(); j++) {
+                if (wins <= 0) {
+                    break;
+                }
+                cards.set(j, cards.get(j) + (cards.get(i)));
+                wins -= 1;
+            }
+        }
+        return cards;
+    }
+
+    public static int getWinningTotal(String line) {
+        var count = getNumberOfMatchingNumbers(line) - 1;
+        var result = count < 0 ? 0 : Math.pow(2, count);
+        return (int) result;
     }
 }
