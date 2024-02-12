@@ -119,4 +119,62 @@ public class ChallengeUtil {
         var result = count < 0 ? 0 : Math.pow(2, count);
         return (int) result;
     }
+
+    public static int getSumOfAdjacentNumbers(List<String> lines, char[][] ar) {
+        var sum = 0;
+        var adjecent =false;
+        StringBuilder currentNumber = new StringBuilder();
+        for (int row = 0; row < lines.size(); row++) {
+            for (int column = 0; column < lines.getFirst().length(); column++) {
+                Character ch = null;
+                var i = column;
+
+                do {
+                    ch = lines.get(row).charAt(i);
+                    if (Character.isDigit(ch)) {
+                        currentNumber.append(ch);
+                        if ((ar[row][i]) == 'x') {
+                            adjecent = true;
+                        }
+                    } else {
+                        break;
+                    }
+                    i++;
+                } while( i < lines.getFirst().length());
+
+                 column = i;
+                if (adjecent) {
+                    sum+= Integer.parseInt(currentNumber.toString());
+                    adjecent = false;
+                }
+                currentNumber = new StringBuilder();
+
+            }
+        }
+        return sum;
+    }
+
+    public static char[][] buildMatrix(List<String> lines) {
+        char[][] ar = new char[lines.size()][lines.getFirst().length()];
+        for (int row = 0; row < lines.size(); row++) {
+            for (int column = 0; column < lines.getFirst().length(); column++) {
+                var ch = lines.get(row).charAt(column);
+                if (!(Character.isDigit(ch) || ch == '.')) {
+                    int top = Math.min(row + 1, lines.size());
+                    int bottom = Math.max(row - 1,0);
+                    int left = Math.max(column - 1, 0);
+                    int right = Math.min(column + 1, lines.getFirst().length());
+                    ar[top][left] = 'x';
+                    ar[top][column] = 'x';
+                    ar[top][right] = 'x';
+                    ar[row][left] = 'x';
+                    ar[row][right] = 'x';
+                    ar[bottom][left] = 'x';
+                    ar[bottom][column] = 'x';
+                    ar[bottom][right] = 'x';
+                }
+            }
+        }
+        return ar;
+    }
 }

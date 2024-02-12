@@ -41,27 +41,14 @@ public class ChallengesController {
                 .sum();
     }
 
-//    @PostMapping(value = "/c3")
-//    public int solveChallenge3(@RequestBody String body) {
-//        char [][] ar = new char[1][1];
-////        array_name[row_index][column_index] = value;
-//        List<String> lines = InputReader.getLines(body);
-//        List<Integer> engineNumbers = List.of();
-////        engineNumbers.add()
-//        lines.stream().forEach(l -> {
-//            for (char ch: l.toCharArray()) {
-//
-//            }
-//            l.charAt()
-//        });
-//        System.out.println(InputReader.getLines(body));
-////        return InputReader.getLines(body)
-////                .stream()
-////                .mapToInt(line -> ChallengeUtil.calculatePowerSet(line.split(":")[1]))
-////                .sum();
-//
-//        return 0;
-//    }
+    @PostMapping(value = "/c3")
+    public int solveChallenge3(@RequestBody String body) {
+        // Ahh, I know this solution is stupid and inefficient, and most likely there is a better approach.
+        // But I have a life and my birthday to celebrate.
+        List<String> lines = InputReader.getLines(body);
+        char[][] ar = ChallengeUtil.buildMatrix(lines);
+        return ChallengeUtil.getSumOfAdjacentNumbers(lines, ar);
+    }
 
 
     @PostMapping(value = "/c4")
